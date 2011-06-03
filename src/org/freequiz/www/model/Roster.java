@@ -40,7 +40,6 @@ public class Roster {
 	}
 
 	/**
-	 * Returns an ArrayList collection of the Students
 	 * @return the roster
 	 */
 	public ArrayList<Student> getRoster() {
@@ -48,15 +47,21 @@ public class Roster {
 	}
 
 	/**
-	 * Sets the class list of the Roster
 	 * @param roster must be of type ArrayList<Student>
+	 * @return <code>true</code> if roster was set
 	 */
-	public void setRoster(ArrayList<Student> roster) {
-		this.roster = roster;
+	public boolean setRoster(ArrayList<Student> roster) {
+		if(roster.isEmpty()) {
+			System.err.println("roster cannot be empty");
+			return false;
+		}
+		else {
+			this.roster = roster;
+			return true;
+		}
 	}
 
 	/**
-	 * 
 	 * @return name of the roster
 	 */
 	public String getName() {
@@ -64,15 +69,21 @@ public class Roster {
 	}
 
 	/**
-	 * 
 	 * @param name must not be null
+	 * @return <code>true</code> if the name was set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public boolean setName(String name) {
+		if(!name.isEmpty()) {
+			this.name = name;
+			return true;
+		}
+		else {
+			System.err.println("name cannot be null.");
+			return false;
+		}
 	}
 
 	/**
-	 * 
 	 * @return description of the roster
 	 */
 	public String getDescription() {
@@ -80,11 +91,18 @@ public class Roster {
 	}
 
 	/**
-	 * 
 	 * @param description must not be null
+	 * @return <code>true</code> if the name was set
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public boolean setDescription(String description) {
+		if(!description.isEmpty()) {
+			this.description = description;
+			return true;
+		}
+		else {
+			System.err.println("description cannot be null.");
+			return false;
+		}
 	}
 	
 	/**

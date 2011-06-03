@@ -71,7 +71,7 @@ public class Question {
 			return true;
 		} 
 		else {
-			System.err.println("Invalid question " + questionid + " ID, must be greater than 0.");			
+			System.err.println("Invalid questionid " + questionid + ", questionid must be greater than 0.");			
 			return false;
 		}
 	}
@@ -87,7 +87,7 @@ public class Question {
 	/**
 	 * 
 	 * @param topicid the topicid to set, must be greater than 0
-	 * @return <code>true</code> if the topic was set
+	 * @return <code>true</code> if the topicid was set
 	 */
 	public boolean setTopicid(int topicid) {
 		if(topicid > 0) {
@@ -95,7 +95,7 @@ public class Question {
 			return true;
 		}
 		else {
-			System.err.println("Invalid topic " + topicid + " ID, must be greater than 0.");	
+			System.err.println("Invalid topicid " + topicid + ", topicid must be greater than 0.");	
 			return false;
 		}
 	}
@@ -111,12 +111,17 @@ public class Question {
 	/**
 	 * 
 	 * @param questionText the questionText to set, must not be null
+	 * @return <code>true</code> if the questionText was set
 	 */
-	public void setQuestionText(String questionText) {
-		if(!questionText.isEmpty())
+	public boolean setQuestionText(String questionText) {
+		if(!questionText.isEmpty()) {
 			this.questionText = questionText;
-		else
+			return true;
+		}
+		else {
 			System.err.println("Question text cannot be null.");
+			return false;
+		}
 	}
 
 	/**
@@ -130,32 +135,46 @@ public class Question {
 	/**
 	 * 
 	 * @param answerText the answerText to set, must not be null
+	 * @return <code>true</code> if the answerText was set
 	 */
-	public void setAnswerText(String answerText) {
-		if(!answerText.isEmpty())
+	public boolean setAnswerText(String answerText) {
+		if(!answerText.isEmpty()) {
 			this.answerText = answerText;
-		else
+			return true;
+		}
+		else {
 			System.err.println("Answer text cannot be null.");
+			return false;
+		}
 	}
 	
 	/**
 	 * @param questionText the questionText to set, must not be null
 	 * @param answerText the answerText to set, must not be null
+	 * @return <code>true</code> if the questionText and answerText was set
 	 */
-	public void setQuestionAndAnswerText(String questionText, String answerText) {
-		setQuestionText(questionText);
-		setAnswerText(answerText);
+	public boolean setQuestionAndAnswerText(String questionText, String answerText) {
+		if(setQuestionText(questionText) == false)
+			return false;
+		if(setAnswerText(answerText) == false)
+			return false;
+		return true;
 	}
 	
 	/**
 	 * @param questionText the questionText to set, must not be null
 	 * @param answerText the answerText to set, must not be null
 	 * @param difficulty the difficulty to set, must be greater than 0
+	 * @return <code>true</code> if the questionText, answerText and difficulty was set
 	 */
-	public void setQuestionAndAnswerText(String questionText, String answerText, int difficulty) {
-		setQuestionText(questionText);
-		setAnswerText(answerText);
-		setDifficulty(difficulty);
+	public boolean setQuestionAnswerDifficulty(String questionText, String answerText, int difficulty) {
+		if(setQuestionText(questionText) == false)
+			return false;
+		if(setAnswerText(answerText) == false)
+			return false;
+		if(setDifficulty(difficulty) == false)
+			return false;
+		return true;
 	}
 
 	/**
@@ -167,12 +186,17 @@ public class Question {
 
 	/**
 	 * @param difficulty the difficulty to set, must be greater than 0
+	 * @return <code>true</code> if the difficulty was set
 	 */
-	public void setDifficulty(int difficulty) {
-		if(difficulty > 0)
+	public boolean setDifficulty(int difficulty) {
+		if(difficulty > 0) {
 			this.difficulty = difficulty;
-		else
-			System.err.println("Difficulty " + difficulty + " is invalid, difficult my be greater than 0.");
+			return true;
+		}
+		else {
+			System.err.println("Difficulty " + difficulty + " is invalid, difficulty must be greater than 0.");
+			return false;
+		}
 	}
 
 	/**

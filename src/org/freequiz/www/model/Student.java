@@ -33,9 +33,17 @@ public class Student {
 	/**
 	 * 
 	 * @param studentid the studentid to set
+	 * @return <code>true</code> if the studentid was set
 	 */
-	public void setStudentid(int studentid) {
-		this.studentid = studentid;
+	public boolean setStudentid(int studentid) {
+		if(studentid > 0) {
+			this.studentid = studentid;
+			return true;
+		} 
+		else {
+			System.err.println("Invalid studentid " + studentid + ", studentid must be greater than 0.");			
+			return false;
+		}
 	}
 
 	/**
@@ -49,9 +57,17 @@ public class Student {
 	/**
 	 * 
 	 * @param name the name to set
+	 * @return <code>true</code> if the name was set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public boolean setName(String name) {
+		if(!name.isEmpty()) {
+			this.name = name;
+			return true;
+		}
+		else {
+			System.err.println("name cannot be null.");
+			return false;
+		}
 	}
 
 	/**
