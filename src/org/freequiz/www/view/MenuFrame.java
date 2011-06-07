@@ -38,6 +38,10 @@ public class MenuFrame extends JFrame {
 	private JMenuItem preferencesMenuItem;
 	private JMenuItem aboutMenuItem;
 	
+	private JLabel testLabel;
+	
+	//private QuestionAdminMenuPanel qamp;
+	
 	/**
 	 * Class constructor
 	 */
@@ -63,6 +67,9 @@ public class MenuFrame extends JFrame {
 		pasteMenuItem = new JMenuItem();
 		preferencesMenuItem = new JMenuItem();
 		aboutMenuItem = new JMenuItem();
+		//qamp = new QuestionAdminMenuPanel();
+		testLabel = new JLabel();
+		testLabel.setText("Test Label");
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
@@ -76,13 +83,7 @@ public class MenuFrame extends JFrame {
 		frameTitle.setText("Main Menu");
 		frameTitle.setFont(new Font("Calibri", 1, 24));
 		frameTitle.setAlignmentX(CENTER_ALIGNMENT);
-		
-		add(Box.createVerticalStrut(5));
-		add(frameBanner);
-		add(Box.createVerticalStrut(5));
-		add(frameTitle);
-		add(Box.createVerticalStrut(5));
-		add(frameContentPanel);
+		frameContentPanel.add(testLabel, BorderLayout.CENTER);
 		
 		/* Create Menu Bar */
 		fileMenu.setText("File");
@@ -119,7 +120,15 @@ public class MenuFrame extends JFrame {
 		helpMenu.add(aboutMenuItem);
 		menuBar.add(helpMenu);
 		
+		//frameContentPanel.add(qamp, BorderLayout.CENTER);
+		
 		setJMenuBar(menuBar);
+		add(Box.createVerticalStrut(5));
+		add(frameBanner, BorderLayout.NORTH);
+		add(Box.createVerticalStrut(5));
+		add(frameTitle, BorderLayout.NORTH);
+		add(Box.createVerticalStrut(5));
+		add(frameContentPanel, BorderLayout.CENTER);
 		
 		pack();
 	}
@@ -135,7 +144,7 @@ public class MenuFrame extends JFrame {
 	/**
 	 * @param newTitle new title to set
 	 */
-	public void setTitle(String newTitle) {
+	public void setFrameTitle(String newTitle) {
 		if(newTitle.isEmpty()) 
 			System.err.println("new title cannot be null.");
 		else
@@ -160,7 +169,11 @@ public class MenuFrame extends JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new MenuFrame().setVisible(true);
+                MenuFrame mainFrame = new MenuFrame();
+                mainFrame.setFrameTitle("Question Administration Menu");
+                mainFrame.setContentPane(new QuestionAdminMenuPanel());
+                mainFrame.setVisible(true);
+                
             }
         });
 

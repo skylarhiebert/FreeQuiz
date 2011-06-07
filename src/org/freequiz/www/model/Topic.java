@@ -10,19 +10,22 @@ package org.freequiz.www.model;
 public class Topic {
 	int topicid;
 	String topicText;
+	Subject subject;
 	int gradeLevel;
 
 	/**
 	 * Class constructor specifying topic id, topic text and grade level
 	 * @param topicid the topicid to set
 	 * @param topicText the topicText to set
+	 * @param subjext the subjext to set
 	 * @param gradeLevel the gradeLevel to set
 	 */
-	public Topic(int topicid, String topicText, int gradeLevel) {
+	public Topic(int topicid, String topicText, Subject subject, int gradeLevel) {
 		super();
-		this.topicid = topicid;
-		this.topicText = topicText;
-		this.gradeLevel = gradeLevel;
+		setTopicid(topicid);
+		setTopicText(topicText);
+		setSubject(subject);
+		setGradeLevel(gradeLevel);
 	}
 	
 	/**
@@ -70,6 +73,25 @@ public class Topic {
 	}
 
 	/**
+	 * @return the subject
+	 */
+	public Subject getSubject() {
+		return subject;
+	}
+
+	/**
+	 * @param subject the subject to set
+	 * @return <code>true</code> if subject was set
+	 */
+	public boolean setSubject(Subject subject) {
+		if(subject.isValid()) {
+			this.subject = subject;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * @return the gradeLevel
 	 */
 	public int getGradeLevel() {
@@ -89,6 +111,16 @@ public class Topic {
 			System.err.println("Invalid gradeLevel " + gradeLevel + ", gradeLevel must be greater than 0.");	
 			return false;
 		}
+	}
+	
+	/**
+	 * 
+	 * @return <code>true</code> if topicid and gradeLevel > 0 and topicText is not null
+	 */
+	public boolean isValid() {
+		if(topicid > 0 && gradeLevel > 0 && !topicText.isEmpty())
+			return true;
+		return false;
 	}
 
 	/**

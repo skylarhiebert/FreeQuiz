@@ -30,7 +30,7 @@ package org.freequiz.www.model;
  */
 public class Question {
 	int questionid;
-	int topicid;
+	Topic topic;
 	String questionText;
 	String answerText;
 	int difficulty;
@@ -38,15 +38,15 @@ public class Question {
 	/**
 	 * Class constructor specifying questionid, topicid, questionText, answerText and difficulty
 	 * @param qid the questionid
-	 * @param tid the topicid
+	 * @param top the topic
 	 * @param qt the questionText
 	 * @param at the answerText
 	 * @param diff the difficulty
 	 */
-	public Question(int qid, int tid, String qt, String at, int diff) {
+	public Question(int qid, Topic top, String qt, String at, int diff) {
 		super();
 		setQuestionid(qid);
-		setTopicid(tid);
+		setTopic(top);
 		setQuestionText(qt);
 		setAnswerText(at);
 		setDifficulty(diff);
@@ -78,24 +78,25 @@ public class Question {
 
 	/**
 	 * 
-	 * @return the topicid
+	 * @return the topic
 	 */
-	public int getTopicid() {
-		return topicid;
+	public Topic getTopic() {
+		return topic;
 	}
 	
 	/**
 	 * 
-	 * @param topicid the topicid to set, must be greater than 0
-	 * @return <code>true</code> if the topicid was set
+	 * @param newTopic the Topic to set, must be a valid topic
+	 * @return <code>true</code> if the topic was set
+	 * @see Topic.isValid()
 	 */
-	public boolean setTopicid(int topicid) {
-		if(topicid > 0) {
-			this.topicid = topicid;
+	public boolean setTopic(Topic newTopic) {
+		if(newTopic.isValid()) {
+			this.topic = newTopic;
 			return true;
 		}
 		else {
-			System.err.println("Invalid topicid " + topicid + ", topicid must be greater than 0.");	
+			System.err.println("Invalid newTopic is not a valid Topic");	
 			return false;
 		}
 	}
