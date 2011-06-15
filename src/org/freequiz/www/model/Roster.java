@@ -11,9 +11,9 @@ import java.util.Collection;
  *
  */
 public class Roster {
-	ArrayList<Student> roster;
-	String name;
-	String description;
+	private ArrayList<Student> roster;
+	private String name;
+	private String description;
 
 	/**
 	 * Class constructor specifying the name and description of the Roster

@@ -8,8 +8,8 @@ package org.freequiz.www.model;
  *
  */
 public class Subject {
-	int subjectid;
-	String subjectText;
+	private int subjectid;
+	private String subjectText;
 	
 	/**
 	 * Class Constructor
@@ -73,6 +73,10 @@ public class Subject {
 		if(subjectid > 0 && !subjectText.isEmpty())
 			return true;
 		return false;
+	}
+	
+	public String toString() {
+		return subjectText;
 	}
 	
 	/**

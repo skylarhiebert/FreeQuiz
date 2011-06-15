@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
  * @author Skylar Hiebert
  *
  */
-public class MenuFrame extends JFrame {
+public class FreeQuizFrame extends JFrame {
 	/**
 	 * 
 	 */
@@ -45,7 +45,7 @@ public class MenuFrame extends JFrame {
 	/**
 	 * Class constructor
 	 */
-	public MenuFrame() {
+	public FreeQuizFrame() {
 		initComponents();
 	}
 	
@@ -74,7 +74,7 @@ public class MenuFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		setMinimumSize(new Dimension(800, 600));
-		setResizable(false);
+		//setResizable(false);
 		setTitle("Freequiz");
 		
 		/* Add Banner and Title */
@@ -95,12 +95,7 @@ public class MenuFrame extends JFrame {
 		fileMenu.add(loadGameMenuItem);
 		quitMenuItem.setText("Quit");
 		quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-		quitMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				quitMenuItemAction(evt);
-			}
-		});
+
 		fileMenu.add(quitMenuItem);
 		menuBar.add(fileMenu);
 		
@@ -137,8 +132,8 @@ public class MenuFrame extends JFrame {
 	 * Exits from the program
 	 * @param evt
 	 */
-	private void quitMenuItemAction(ActionEvent evt) {
-		System.exit(1);
+	public void quitMenuItemAddActionListener(ActionListener al) {
+		quitMenuItem.addActionListener(al);
 	}
 	
 	/**
@@ -159,24 +154,4 @@ public class MenuFrame extends JFrame {
 		this.frameContentPanel.removeAll();
 		this.frameContentPanel.add(newPanel, BorderLayout.CENTER);
 	}
-	
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                MenuFrame mainFrame = new MenuFrame();
-                mainFrame.setFrameTitle("Question Administration Menu");
-                mainFrame.setContentPane(new QuestionAdminMenuPanel());
-                mainFrame.setVisible(true);
-                
-            }
-        });
-
-	}
-
 }

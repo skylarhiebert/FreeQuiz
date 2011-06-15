@@ -29,11 +29,11 @@ package org.freequiz.www.model;
  * 
  */
 public class Question {
-	int questionid;
-	Topic topic;
-	String questionText;
-	String answerText;
-	int difficulty;
+	private int questionid;
+	private Topic topic;
+	private String questionText;
+	private String answerText;
+	private int difficulty;
 
 	/**
 	 * Class constructor specifying questionid, topicid, questionText, answerText and difficulty
@@ -100,7 +100,21 @@ public class Question {
 			return false;
 		}
 	}
+	
+	/**
+	 * @return the subject
+	 */
+	public Subject getSubject() {
+		return topic.getSubject();
+	}
 
+	/**
+	 * @return the gradeLevel
+	 */
+	public int getGradeLevel() {
+		return topic.getGradeLevel();
+	}
+	
 	/**
 	 * 
 	 * @return String for the current questionText

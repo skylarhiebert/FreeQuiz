@@ -8,10 +8,17 @@ package org.freequiz.www.model;
  *
  */
 public class Topic {
-	int topicid;
-	String topicText;
-	Subject subject;
-	int gradeLevel;
+	private int topicid;
+	private String topicText;
+	private Subject subject;
+	private int gradeLevel;
+	
+	public Topic(int topicid, String topicText, int gradeLevel) {
+		super();
+		setTopicid(topicid);
+		setTopicText(topicText);
+		setGradeLevel(gradeLevel);
+	}
 
 	/**
 	 * Class constructor specifying topic id, topic text and grade level
@@ -84,7 +91,7 @@ public class Topic {
 	 * @return <code>true</code> if subject was set
 	 */
 	public boolean setSubject(Subject subject) {
-		if(subject.isValid()) {
+		if(subject != null && subject.isValid()) {
 			this.subject = subject;
 			return true;
 		}
@@ -105,6 +112,7 @@ public class Topic {
 	public boolean setGradeLevel(int gradeLevel) {
 		if(gradeLevel > 0) {
 			this.gradeLevel = gradeLevel;
+			//firePropertyChange(DefaultController.)
 			return true;
 		}
 		else {
@@ -121,6 +129,10 @@ public class Topic {
 		if(topicid > 0 && gradeLevel > 0 && !topicText.isEmpty())
 			return true;
 		return false;
+	}
+	
+	public String toString() {
+		return topicText;
 	}
 
 	/**

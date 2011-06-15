@@ -8,8 +8,8 @@ package org.freequiz.www.model;
  *
  */
 public class Student {
-	int studentid;
-	String name;
+	private int studentid;
+	private String name;
 	
 	/**
 	 * Class constructor specifying studentid and name
