@@ -1,44 +1,48 @@
+package org.freequiz.www.model;
 /**
  * 
  */
-package org.freequiz.www.model;
+
+
+import javax.persistence.*;
+
+//import javax.persistence.CascadeType;
 
 /**
  * @author Skylar Hiebert
  *
  */
+@Entity
+@Table(name = "TOPICS")
 public class Topic {
-	private int topicid;
+	private Long topicid;
 	private String topicText;
 	private Subject subject;
-	private int gradeLevel;
 	
-	public Topic(int topicid, String topicText, int gradeLevel) {
-		super();
-		setTopicid(topicid);
-		setTopicText(topicText);
-		setGradeLevel(gradeLevel);
+	public Topic() {
 	}
 
+	public Topic(String topicText) {
+		setTopicText(topicText);
+	}
+	
 	/**
 	 * Class constructor specifying topic id, topic text and grade level
 	 * @param topicid the topicid to set
 	 * @param topicText the topicText to set
-	 * @param subjext the subjext to set
-	 * @param gradeLevel the gradeLevel to set
 	 */
-	public Topic(int topicid, String topicText, Subject subject, int gradeLevel) {
-		super();
+	public Topic(Long topicid, String topicText) {
 		setTopicid(topicid);
 		setTopicText(topicText);
-		setSubject(subject);
-		setGradeLevel(gradeLevel);
 	}
 	
 	/**
 	 * @return the topicid
 	 */
-	public int getTopicid() {
+	@Id
+	@GeneratedValue
+	@Column(name="TOPICID")
+	public Long getTopicid() {
 		return topicid;
 	}
 
@@ -46,20 +50,14 @@ public class Topic {
 	 * @param topicid the topicid to set, must be greater than 0
 	 * @return <code>true</code> if the topicid was set
 	 */
-	public boolean setTopicid(int topicid) {
-		if(topicid > 0) {
+	private void setTopicid(Long topicid) {
 			this.topicid = topicid;
-			return true;
-		}
-		else {
-			System.err.println("Invalid topicid " + topicid + ", topicid must be greater than 0.");	
-			return false;
-		}
 	}
 
 	/**
 	 * @return the topicText
 	 */
+	@Column(name="TOPIC", length = 255, nullable = false)
 	public String getTopicText() {
 		return topicText;
 	}
@@ -68,20 +66,15 @@ public class Topic {
 	 * @param topicText the topicText to set, must not be null
 	 * @return <code>true</code> if the topic was set
 	 */
-	public boolean setTopicText(String topicText) {
-		if(!topicText.isEmpty()) {
+	public void setTopicText(String topicText) {
 			this.topicText = topicText;
-			return true;
-		}
-		else {
-			System.err.println("topicText cannot be null.");
-			return false;
-		}
 	}
-
+	
 	/**
 	 * @return the subject
 	 */
+	@ManyToOne
+	@JoinColumn(name="SUBJECTID", nullable=false)
 	public Subject getSubject() {
 		return subject;
 	}
@@ -90,57 +83,69 @@ public class Topic {
 	 * @param subject the subject to set
 	 * @return <code>true</code> if subject was set
 	 */
-	public boolean setSubject(Subject subject) {
-		if(subject != null && subject.isValid()) {
+	public void setSubject(Subject subject) {
 			this.subject = subject;
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * @return the gradeLevel
-	 */
-	public int getGradeLevel() {
-		return gradeLevel;
-	}
-
-	/**
-	 * @param gradeLevel the gradeLevel to set, must be greater than 0
-	 * @return <code>true</code> if the gradeLevel was set
-	 */
-	public boolean setGradeLevel(int gradeLevel) {
-		if(gradeLevel > 0) {
-			this.gradeLevel = gradeLevel;
-			//firePropertyChange(DefaultController.)
-			return true;
-		}
-		else {
-			System.err.println("Invalid gradeLevel " + gradeLevel + ", gradeLevel must be greater than 0.");	
-			return false;
-		}
 	}
 	
 	/**
 	 * 
 	 * @return <code>true</code> if topicid and gradeLevel > 0 and topicText is not null
 	 */
+	@Transient
 	public boolean isValid() {
-		if(topicid > 0 && gradeLevel > 0 && !topicText.isEmpty())
+		if(topicid > 0 && !topicText.isEmpty())
 			return true;
 		return false;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Transient
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
+		result = prime * result
+				+ ((topicText == null) ? 0 : topicText.hashCode());
+		result = prime * result + ((topicid == null) ? 0 : topicid.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Transient
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Topic other = (Topic) obj;
+		if (subject == null) {
+			if (other.subject != null)
+				return false;
+		} else if (!subject.equals(other.subject))
+			return false;
+		if (topicText == null) {
+			if (other.topicText != null)
+				return false;
+		} else if (!topicText.equals(other.topicText))
+			return false;
+		if (topicid == null) {
+			if (other.topicid != null)
+				return false;
+		} else if (!topicid.equals(other.topicid))
+			return false;
+		return true;
+	}
+
+	@Transient
 	public String toString() {
 		return topicText;
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

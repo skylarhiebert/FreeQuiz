@@ -53,15 +53,23 @@ public class FQDefaultComboBoxModel extends DefaultComboBoxModel {
 			System.err.println("Empty Collection\n");
 			return;
 		}
+
 		Iterator<?> i = c.iterator();
-		System.out.println("After Iterator\n");
 		while(i.hasNext())
 			addElement(i.next());
-		fireContentsChanged(this, 0, getSize());
+//		fireContentsChanged(this, 0, getSize());
 	}
 	
 	public void addAll(Object[] elements) {
 		addAll(Arrays.asList(elements));
+	}
+	
+	public int getSelectedItemIndex() {
+		return getIndexOf(getSelectedItem());
+	}
+	
+	public void setSelectedItemIndex(int index) {
+		setSelectedItem(getElementAt(index));
 	}
 	
 	public void setElements(Collection<?> c) {

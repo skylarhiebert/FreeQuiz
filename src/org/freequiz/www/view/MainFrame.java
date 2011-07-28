@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +17,7 @@ import java.awt.event.ActionListener;
  * @author Skylar Hiebert
  *
  */
-public class FreeQuizFrame extends JFrame {
+public class MainFrame extends JFrame {
 	/**
 	 * 
 	 */
@@ -45,7 +44,7 @@ public class FreeQuizFrame extends JFrame {
 	/**
 	 * Class constructor
 	 */
-	public FreeQuizFrame() {
+	public MainFrame() {
 		initComponents();
 	}
 	
@@ -118,12 +117,12 @@ public class FreeQuizFrame extends JFrame {
 		//frameContentPanel.add(qamp, BorderLayout.CENTER);
 		
 		setJMenuBar(menuBar);
-		add(Box.createVerticalStrut(5));
-		add(frameBanner, BorderLayout.NORTH);
-		add(Box.createVerticalStrut(5));
-		add(frameTitle, BorderLayout.NORTH);
-		add(Box.createVerticalStrut(5));
-		add(frameContentPanel, BorderLayout.CENTER);
+		this.getContentPane().add(Box.createVerticalStrut(5));
+		this.getContentPane().add(frameBanner, BorderLayout.NORTH);
+		this.getContentPane().add(Box.createVerticalStrut(5));
+		this.getContentPane().add(frameTitle, BorderLayout.NORTH);
+		this.getContentPane().add(Box.createVerticalStrut(5));
+		this.getContentPane().add(frameContentPanel, BorderLayout.CENTER);
 		
 		pack();
 	}
@@ -132,7 +131,7 @@ public class FreeQuizFrame extends JFrame {
 	 * Exits from the program
 	 * @param evt
 	 */
-	public void quitMenuItemAddActionListener(ActionListener al) {
+	public void addQuitMenuItemActionListener(ActionListener al) {
 		quitMenuItem.addActionListener(al);
 	}
 	
@@ -151,7 +150,7 @@ public class FreeQuizFrame extends JFrame {
 	 * @param newPanel the new panel to be set
 	 */
 	public void setContentPane(Container newPanel) {
-		this.frameContentPanel.removeAll();
-		this.frameContentPanel.add(newPanel, BorderLayout.CENTER);
+		frameContentPanel.removeAll();
+		frameContentPanel.add(newPanel, BorderLayout.CENTER);
 	}
 }

@@ -5,16 +5,32 @@ package org.freequiz.www.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.*;
+
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * @author Skylar Hiebert
  *
  */
+@Entity
+@Table(name="CLASS")
+//@SecondaryTable(name="STUDENT_ROSTER")
 public class Roster {
-	private ArrayList<Student> roster;
+	private Long rosterid;
+	private List<Student> studentList = new ArrayList<Student>();
 	private String name;
 	private String description;
 
+	public Roster() {
+		super();
+		setName("New Roster");
+		setDescription("New Roster Description");
+	}
+	
 	/**
 	 * Class constructor specifying the name and description of the Roster
 	 * @param name must not be null
@@ -32,38 +48,68 @@ public class Roster {
 	 * @param name the name to set, must not be null
 	 * @param description the description to set, must not be null
 	 */
-	public Roster(Collection<Student> roster, String name, String description) {
+	public Roster(List<Student> roster, String name, String description) {
 		super();
-		this.roster.addAll(roster);
+		setStudentList(roster);
+		setName(name);
+		setDescription(description);
+	}
+	
+	/**
+	 * Class constructor specifying the students, name and description of the Roster
+	 * @param roster the collection of students to set, must not be null
+	 * @param name the name to set, must not be null
+	 * @param description the description to set, must not be null
+	 */
+	public Roster(Long rosterid, List<Student> roster, String name, String description) {
+		super();
+		setRosterid(rosterid);
+		setStudentList(roster);
 		setName(name);
 		setDescription(description);
 	}
 
 	/**
-	 * @return the roster
+	 * @return the rosterid
 	 */
-	public ArrayList<Student> getRoster() {
-		return roster;
+	@Id
+	@GeneratedValue
+	@Column(name="ROSTERID")
+	public Long getRosterid() {
+		return rosterid;
 	}
 
 	/**
-	 * @param roster must be of type ArrayList<Student>
-	 * @return <code>true</code> if roster was set
+	 * @param rosterid the rosterid to set
 	 */
-	public boolean setRoster(ArrayList<Student> roster) {
-		if(roster.isEmpty()) {
-			System.err.println("roster cannot be empty");
-			return false;
-		}
-		else {
-			this.roster = roster;
-			return true;
-		}
+	private void setRosterid(Long rosterid) {
+		this.rosterid = rosterid;
+	}
+
+	/**
+	 * @return the roster
+	 */
+	@ManyToMany
+	@JoinTable(name="STUDENT_ROSTER",
+			joinColumns={@JoinColumn(name="ROSTERID")},
+			inverseJoinColumns={@JoinColumn(name="STUDENTID")}
+	)
+	public List<Student> getStudentList() {
+		return studentList;
+	}
+
+	/**
+	 * @param studentList the roster to set
+	 */
+	public void setStudentList(List<Student> studentList) {
+		Hibernate.initialize(studentList);
+		this.studentList = studentList;
 	}
 
 	/**
 	 * @return name of the roster
 	 */
+	@Column(name="NAME")
 	public String getName() {
 		return name;
 	}
@@ -72,20 +118,19 @@ public class Roster {
 	 * @param name must not be null
 	 * @return <code>true</code> if the name was set
 	 */
-	public boolean setName(String name) {
+	public void setName(String name) {
 		if(!name.isEmpty()) {
 			this.name = name;
-			return true;
 		}
 		else {
 			System.err.println("name cannot be null.");
-			return false;
 		}
 	}
 
 	/**
 	 * @return description of the roster
 	 */
+	@Column(name="DESCRIPTION")
 	public String getDescription() {
 		return description;
 	}
@@ -94,15 +139,18 @@ public class Roster {
 	 * @param description must not be null
 	 * @return <code>true</code> if the name was set
 	 */
-	public boolean setDescription(String description) {
+	public void setDescription(String description) {
 		if(!description.isEmpty()) {
 			this.description = description;
-			return true;
 		}
 		else {
 			System.err.println("description cannot be null.");
-			return false;
 		}
+	}
+	
+	@Transient
+	public int getNumberOfStudents() {
+		return studentList.size();
 	}
 	
 	/**
@@ -111,7 +159,7 @@ public class Roster {
 	 * @return <code>true</code> if this roster changed as a result of the call (as specified by Collection.add(E))
 	 */
 	public boolean addStudent(Student student) {
-		return this.roster.add(student);
+		return this.studentList.add(student);
 	}
 	
 	/**
@@ -120,7 +168,7 @@ public class Roster {
 	 * @return <code>true</code> if this list contained the specified element
 	 */
 	public boolean removeStudent(Student student) {
-		return this.roster.remove(student);
+		return this.studentList.remove(student);
 	}
 	
 	/**
@@ -131,7 +179,7 @@ public class Roster {
 	 * @see AbstractCollection.add(Object)
 	 */
 	public boolean addStudents(Collection<Student> students) {
-		return this.roster.addAll(students);
+		return this.studentList.addAll(students);
 	}
 	
 	/**
@@ -143,15 +191,75 @@ public class Roster {
 	 * @throws NullPointerException if this collection contains one or more null elements and the specified collection does not support null elements, or if the specified collection is null.
 	 * @see remove(Object), contains(Object), Collection.removeAll(Collection<? extends E>)
 	 */
+
 	public boolean removeStudents(Collection<Student> students) {
-		return this.roster.removeAll(students);
+		return this.studentList.removeAll(students);
 	}
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
+	public void removeAllStudents() {
+		this.studentList.clear();
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Transient
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Transient
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((studentList == null) ? 0 : studentList.hashCode());
+		result = prime * result
+				+ ((rosterid == null) ? 0 : rosterid.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Transient
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Roster other = (Roster) obj;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (studentList == null) {
+			if (other.studentList != null)
+				return false;
+		} else if (!studentList.equals(other.studentList))
+			return false;
+		if (rosterid == null) {
+			if (other.rosterid != null)
+				return false;
+		} else if (!rosterid.equals(other.rosterid))
+			return false;
+		return true;
+	}
+	
 }

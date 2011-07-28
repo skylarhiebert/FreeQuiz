@@ -24,16 +24,25 @@
 
 package org.freequiz.www.model;
 
+import javax.persistence.*;
+
 /**
  * @author Skylar Hiebert
  * 
  */
+@Entity
+@Table(name = "QUESTIONS")
 public class Question {
-	private int questionid;
+	
+	private Long questionid;
 	private Topic topic;
 	private String questionText;
 	private String answerText;
-	private int difficulty;
+	private String gradeLevel;
+	private Long difficulty;
+
+	public Question() {
+	}
 
 	/**
 	 * Class constructor specifying questionid, topicid, questionText, answerText and difficulty
@@ -43,12 +52,13 @@ public class Question {
 	 * @param at the answerText
 	 * @param diff the difficulty
 	 */
-	public Question(int qid, Topic top, String qt, String at, int diff) {
+	public Question(Long qid, Topic top, String qt, String at, String gl, Long diff) {
 		super();
 		setQuestionid(qid);
 		setTopic(top);
 		setQuestionText(qt);
 		setAnswerText(at);
+		setGradeLevel(gl);
 		setDifficulty(diff);
 	}
 	
@@ -56,7 +66,10 @@ public class Question {
 	 * 
 	 * @return the questionid
 	 */
-	public int getQuestionid() {
+	@Id
+	@GeneratedValue
+	@Column(name="QUESTIONID")
+	public Long getQuestionid() {
 		return questionid;
 	}
 
@@ -65,21 +78,16 @@ public class Question {
 	 * @param questionid the questionid to set, must be greater than 0
 	 * @return <code>true</code> if the questionid was set
 	 */
-	public boolean setQuestionid(int questionid) {
-		if(questionid > 0) {
+	public void setQuestionid(Long questionid) {
 			this.questionid = questionid;
-			return true;
-		} 
-		else {
-			System.err.println("Invalid questionid " + questionid + ", questionid must be greater than 0.");			
-			return false;
-		}
 	}
 
 	/**
 	 * 
 	 * @return the topic
 	 */
+	@ManyToOne
+	@JoinColumn(name="TOPICID")
 	public Topic getTopic() {
 		return topic;
 	}
@@ -90,35 +98,15 @@ public class Question {
 	 * @return <code>true</code> if the topic was set
 	 * @see Topic.isValid()
 	 */
-	public boolean setTopic(Topic newTopic) {
-		if(newTopic.isValid()) {
-			this.topic = newTopic;
-			return true;
-		}
-		else {
-			System.err.println("Invalid newTopic is not a valid Topic");	
-			return false;
-		}
-	}
-	
-	/**
-	 * @return the subject
-	 */
-	public Subject getSubject() {
-		return topic.getSubject();
-	}
-
-	/**
-	 * @return the gradeLevel
-	 */
-	public int getGradeLevel() {
-		return topic.getGradeLevel();
+	public void setTopic(Topic topic) {
+			this.topic = topic;
 	}
 	
 	/**
 	 * 
 	 * @return String for the current questionText
 	 */
+	@Column(name="QUESTIONTEXT", nullable=false)
 	public String getQuestionText() {
 		return questionText;
 	}
@@ -128,21 +116,15 @@ public class Question {
 	 * @param questionText the questionText to set, must not be null
 	 * @return <code>true</code> if the questionText was set
 	 */
-	public boolean setQuestionText(String questionText) {
-		if(!questionText.isEmpty()) {
-			this.questionText = questionText;
-			return true;
-		}
-		else {
-			System.err.println("Question text cannot be null.");
-			return false;
-		}
+	public void setQuestionText(String questionText) {
+		this.questionText = questionText;
 	}
 
 	/**
 	 * 
 	 * @return String for the current answerText
 	 */
+	@Column(name="ANSWERTEXT", nullable=false)
 	public String getAnswerText() {
 		return answerText;
 	}
@@ -152,50 +134,15 @@ public class Question {
 	 * @param answerText the answerText to set, must not be null
 	 * @return <code>true</code> if the answerText was set
 	 */
-	public boolean setAnswerText(String answerText) {
-		if(!answerText.isEmpty()) {
-			this.answerText = answerText;
-			return true;
-		}
-		else {
-			System.err.println("Answer text cannot be null.");
-			return false;
-		}
+	public void setAnswerText(String answerText) {
+		this.answerText = answerText;
 	}
 	
-	/**
-	 * @param questionText the questionText to set, must not be null
-	 * @param answerText the answerText to set, must not be null
-	 * @return <code>true</code> if the questionText and answerText was set
-	 */
-	public boolean setQuestionAndAnswerText(String questionText, String answerText) {
-		if(setQuestionText(questionText) == false)
-			return false;
-		if(setAnswerText(answerText) == false)
-			return false;
-		return true;
-	}
-	
-	/**
-	 * @param questionText the questionText to set, must not be null
-	 * @param answerText the answerText to set, must not be null
-	 * @param difficulty the difficulty to set, must be greater than 0
-	 * @return <code>true</code> if the questionText, answerText and difficulty was set
-	 */
-	public boolean setQuestionAnswerDifficulty(String questionText, String answerText, int difficulty) {
-		if(setQuestionText(questionText) == false)
-			return false;
-		if(setAnswerText(answerText) == false)
-			return false;
-		if(setDifficulty(difficulty) == false)
-			return false;
-		return true;
-	}
-
 	/**
 	 * @return the difficulty
 	 */
-	public int getDifficulty() {
+	@Column(name="DIFFICULTY", nullable=false)
+	public Long getDifficulty() {
 		return difficulty;
 	}
 
@@ -203,23 +150,97 @@ public class Question {
 	 * @param difficulty the difficulty to set, must be greater than 0
 	 * @return <code>true</code> if the difficulty was set
 	 */
-	public boolean setDifficulty(int difficulty) {
-		if(difficulty > 0) {
-			this.difficulty = difficulty;
-			return true;
-		}
-		else {
-			System.err.println("Difficulty " + difficulty + " is invalid, difficulty must be greater than 0.");
-			return false;
-		}
+	public void setDifficulty(Long difficulty) {
+		this.difficulty = difficulty;
+	}
+	
+	/**
+	 * @return the gradeLevel
+	 */
+	@Column(name="GRADELEVEL", nullable=false)
+	public String getGradeLevel() {
+		return gradeLevel;
 	}
 
 	/**
-	 * @param args
+	 * @param gradeLevel the gradeLevel to set, must be greater than 0
+	 * @return <code>true</code> if the gradeLevel was set
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public void setGradeLevel(String gradeLevel) {
+			this.gradeLevel = gradeLevel;
+	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Transient
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((answerText == null) ? 0 : answerText.hashCode());
+		result = prime * result
+				+ ((difficulty == null) ? 0 : difficulty.hashCode());
+		result = prime * result
+				+ ((gradeLevel == null) ? 0 : gradeLevel.hashCode());
+		result = prime * result
+				+ ((questionText == null) ? 0 : questionText.hashCode());
+		result = prime * result
+				+ ((questionid == null) ? 0 : questionid.hashCode());
+		result = prime * result + ((topic == null) ? 0 : topic.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Transient
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Question other = (Question) obj;
+		if (answerText == null) {
+			if (other.answerText != null)
+				return false;
+		} else if (!answerText.equals(other.answerText))
+			return false;
+		if (difficulty == null) {
+			if (other.difficulty != null)
+				return false;
+		} else if (!difficulty.equals(other.difficulty))
+			return false;
+		if (gradeLevel == null) {
+			if (other.gradeLevel != null)
+				return false;
+		} else if (!gradeLevel.equals(other.gradeLevel))
+			return false;
+		if (questionText == null) {
+			if (other.questionText != null)
+				return false;
+		} else if (!questionText.equals(other.questionText))
+			return false;
+		if (questionid == null) {
+			if (other.questionid != null)
+				return false;
+		} else if (!questionid.equals(other.questionid))
+			return false;
+		if (topic == null) {
+			if (other.topic != null)
+				return false;
+		} else if (!topic.equals(other.topic))
+			return false;
+		return true;
+	}
+
+	@Transient
+	public String toString() {
+		return getQuestionText();
 	}
 
 }
