@@ -31,7 +31,6 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * @author Skylar Hiebert

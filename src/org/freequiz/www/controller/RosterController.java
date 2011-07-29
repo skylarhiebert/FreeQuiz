@@ -424,7 +424,7 @@ public class RosterController {
 		List<Integer> scores = selectedStudent.getScores();
 		float averageScore = 0;
 		int topScore = 0;
-		studentPanel.setGamesPlayed(selectedStudent.getGamesPlayed());
+		studentPanel.setGamesPlayed(selectedStudent.getNumberGames());
 		if(scores != null) {
 			for(int score : scores) {
 				if(score > topScore)

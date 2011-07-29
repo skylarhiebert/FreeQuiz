@@ -24,6 +24,7 @@
  */
 package org.freequiz.www.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class Student {
 	private String name;
 	private List<Integer> scores;
 	private List<Roster> rosterMembership;
+	private List<StudentGame> gamesPlayed = new ArrayList<StudentGame>();
 	public Student() {}
 	
 	/**
@@ -114,6 +116,22 @@ public class Student {
 		this.rosterMembership = rosterMembership;
 	}
 	
+	/**
+	 * @return the gamesPlayed
+	 */
+	@JoinTable(name="STUDENTGAMES",
+			joinColumns = @JoinColumn(name="STUDENTID"))
+	public List<StudentGame> getGamesPlayed() {
+		return gamesPlayed;
+	}
+
+	/**
+	 * @param gamesPlayed the gamesPlayed to set
+	 */
+	public void setGamesPlayed(List<StudentGame> gamesPlayed) {
+		this.gamesPlayed = gamesPlayed;
+	}
+	
 	@Transient
 	public List<Integer> getScores() {
 		return scores;
@@ -125,7 +143,7 @@ public class Student {
 	}
 	
 	@Transient
-	public Integer getGamesPlayed() {
+	public Integer getNumberGames() {
 		if(scores == null || scores.isEmpty())
 			return 0;
 		else

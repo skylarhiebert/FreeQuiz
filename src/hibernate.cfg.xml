@@ -18,5 +18,7 @@
   <mapping class="org.freequiz.www.model.Question" />
   <mapping class="org.freequiz.www.model.Student" />
   <mapping class="org.freequiz.www.model.Roster" />
+  <mapping class="org.freequiz.www.model.Game" />
+  <mapping class="org.freequiz.www.model.StudentGame" />
  </session-factory>
 </hibernate-configuration>

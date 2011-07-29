@@ -102,9 +102,9 @@ public class MainMenu extends JPanel {
 		navigationPanel.setLayout(navigationPanelLayout);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		navigationPanel.add(classAdminButton, gbc);
-		gbc.gridy = 1;
 		navigationPanel.add(studentAdminButton, gbc);
+		gbc.gridy = 1;
+		navigationPanel.add(classAdminButton, gbc);
 		gbc.gridy = 2;
 		navigationPanel.add(questionAdminButton, gbc);
 		gbc.gridy = 3;
@@ -118,9 +118,9 @@ public class MainMenu extends JPanel {
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.BOTH;
-		navigationPanel.add(classAdminLabel, gbc);
-		gbc.gridy = 1;
 		navigationPanel.add(studentAdminLabel, gbc);
+		gbc.gridy = 1;
+		navigationPanel.add(classAdminLabel, gbc);
 		gbc.gridy = 2;
 		navigationPanel.add(questionAdminLabel, gbc);
 		gbc.gridy = 3;
