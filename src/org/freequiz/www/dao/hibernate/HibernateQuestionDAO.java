@@ -24,6 +24,7 @@
  */
 package org.freequiz.www.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.freequiz.www.dao.QuestionDAO;
@@ -140,6 +141,45 @@ public class HibernateQuestionDAO extends GenericHibernateDAO<Question, Long> im
 		
 		return crit.list();
 	}
+	
+	public List<Question> findRandomQuestionSetByExample(int numQuestions, Question exampleInstance) throws Exception {
+		int maxTries = 5;
+		int tries = 0;
+		List<Question> questionList = new ArrayList<Question>();
+		try {
+			for(int i = 1 ; i <= numQuestions; i++) {
+				Long low = Long.valueOf((i == 1) ? 1 : i - 1); // 1 is minimum low
+				Long high = Long.valueOf((i == numQuestions) ? numQuestions : i + 1); // numQuestions is maximum high
+				Criteria crit = HibernateUtil.getSession().createCriteria(getPersistentClass());
+				Example example = Example.create(exampleInstance).ignoreCase();
+				crit.add(example);
+				if(exampleInstance.getTopic() != null)
+					crit.add(Restrictions.eq("topic", exampleInstance.getTopic()));
+				crit.add(Restrictions.ge("difficulty", low)).add(Restrictions.le("difficulty", high));
+				crit.add(Restrictions.sqlRestriction("1=1 order by random()"));
+				crit.setMaxResults(1).uniqueResult();
+				
+				Question nextQuestion = (Question) crit.list().get(0);
+				if(questionList.contains(nextQuestion) && tries < maxTries) {
+					tries++; // Re-run query if item already in set
+					i--;
+					continue;
+				} else {
+					questionList.add(nextQuestion);
+				}
+			}
+		} catch (IndexOutOfBoundsException ex) {
+			// TODO Display error, generate more questions
+			System.err.println("No Questions for all difficulties");
+			throw ex;
+		} catch (Exception ex) {
+			// TODO Display Error
+			System.err.println("Unable to find enough questions");
+			throw ex;
+		}
+		
+		return questionList;
+	}
 		
 	public int getCount(Topic topic) {
 		Criteria crit = HibernateUtil.getSession().createCriteria(getPersistentClass());
@@ -180,7 +220,7 @@ public class HibernateQuestionDAO extends GenericHibernateDAO<Question, Long> im
 	public List<Question> findBySubject(Subject subject) {
 		Criteria crit = HibernateUtil.getSession().createCriteria(getPersistentClass());
 		crit.createAlias("topic", "topic")
-		.add(Restrictions.eq("topic.subject", subject));
+			.add(Restrictions.eq("topic.subject", subject));
 		
 		return crit.list();
 	}
@@ -213,6 +253,16 @@ public class HibernateQuestionDAO extends GenericHibernateDAO<Question, Long> im
 		crit.add(Restrictions.eq("topic", topic))
 			.setFirstResult(startIndex)
 			.setMaxResults(maxResults);
+		
+		return crit.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> findAllGradeLevels() {
+		Criteria crit = HibernateUtil.getSession().createCriteria(getPersistentClass());
+		
+		crit.setProjection(Projections.distinct(Projections.property("gradeLevel")));
+//		crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
 		return crit.list();
 	}

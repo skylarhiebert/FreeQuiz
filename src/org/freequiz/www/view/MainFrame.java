@@ -87,14 +87,13 @@ public class MainFrame extends JFrame {
 		pasteMenuItem = new JMenuItem();
 		preferencesMenuItem = new JMenuItem();
 		aboutMenuItem = new JMenuItem();
-		//qamp = new QuestionAdminMenuPanel();
 		testLabel = new JLabel();
 		testLabel.setText("Test Label");
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		setMinimumSize(new Dimension(800, 600));
-		//setResizable(false);
+		setPreferredSize(new Dimension(800, 600));
 		setTitle("Freequiz");
 		
 		/* Add Banner and Title */
@@ -145,6 +144,10 @@ public class MainFrame extends JFrame {
 		this.getContentPane().add(Box.createVerticalStrut(5));
 		this.getContentPane().add(frameContentPanel, BorderLayout.CENTER);
 		
+		// Settings that need to be removed as the functions are implemented
+		editMenu.setVisible(false);
+		loadGameMenuItem.setVisible(false);
+		
 		pack();
 	}
 	
@@ -156,12 +159,16 @@ public class MainFrame extends JFrame {
 		quitMenuItem.addActionListener(al);
 	}
 	
+	public void addNewGameMenuItemActionListener(ActionListener al) {
+		newGameMenuItem.addActionListener(al);
+	}
+	
 	/**
 	 * @param newTitle new title to set
 	 */
 	public void setFrameTitle(String newTitle) {
-		if(newTitle.isEmpty()) 
-			System.err.println("new title cannot be null.");
+		if(newTitle == null || newTitle.isEmpty()) 
+			frameTitle.setVisible(false);
 		else
 			frameTitle.setText(newTitle);		
 	}
@@ -173,5 +180,12 @@ public class MainFrame extends JFrame {
 	public void setContentPane(Container newPanel) {
 		frameContentPanel.removeAll();
 		frameContentPanel.add(newPanel, BorderLayout.CENTER);
+	}
+	
+	public java.awt.Component getCurrentContentPane() {
+		if(frameContentPanel.getComponentCount() > 0)
+			return frameContentPanel.getComponent(0);
+		else
+			return null;
 	}
 }

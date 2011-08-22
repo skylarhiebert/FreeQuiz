@@ -19,12 +19,12 @@
  * Contributors:
  *     Skylar Hiebert - initial API and implementation
  ******************************************************************************/
-
 package org.freequiz.www.controller;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -97,8 +97,8 @@ public class QuestionController {
 		questionsPanel = new QuestionAdminMenu();
 		editQuestionPanel = new EditQuestionDialogPanel();
 		editQuestionDialog = new EditDialogFrame(mainController.mainFrame, editQuestionPanel, "Edit Question");
+		editQuestionDialog.setMinimumSize(new Dimension(400, 450));
 		editQuestionDialog.setLocationRelativeTo(mainController.mainFrame);
-		editQuestionDialog.setMinimumSize(new Dimension(400, 400));
 		subjectList = new Vector<Subject>();
 		subjectComboBoxModel = new FQDefaultComboBoxModel(subjectList);
 		questionsPanel.setSubjectFilterComboBoxModel(subjectComboBoxModel);
@@ -110,19 +110,13 @@ public class QuestionController {
 		editTopicComboBoxModel = new FQDefaultComboBoxModel(topicList);
 		editQuestionPanel.setTopicComboBoxModel(editTopicComboBoxModel);
 		gradeLevelList = new Vector<String>();
-		gradeLevelList.add("Pre-K");
-		gradeLevelList.add("K");
-		for(int i = 1; i <= 8; i++)
-			gradeLevelList.add(Integer.toString(i));
-		gradeLevelList.add("High School");
-		gradeLevelList.add("College");
+		gradeLevelList.addAll(Arrays.asList(MainController.GRADELEVELS));
 		gradeLevelComboBoxModel = new FQDefaultComboBoxModel(gradeLevelList);
 		questionsPanel.setGradeLevelFilterComboBoxModel(gradeLevelComboBoxModel);
 		editGradeLevelComboBoxModel = new FQDefaultComboBoxModel(gradeLevelList);
 		editQuestionPanel.setGradeLevelComboBoxModel(editGradeLevelComboBoxModel);
 		difficultyList = new Vector<Long>();
-		for(int i = 1; i <= 8; i++) 
-			difficultyList.add(new Long(i));
+		difficultyList.addAll(Arrays.asList(MainController.DIFFICULTIES));
 		difficultyComboBoxModel = new FQDefaultComboBoxModel(difficultyList);
 		questionsPanel.setDifficultyFilterComboBoxModel(difficultyComboBoxModel);
 		editDifficultyComboBoxModel = new FQDefaultComboBoxModel(difficultyList);
@@ -130,6 +124,7 @@ public class QuestionController {
 		questionList = new Vector<Question>();
 		questionsTableModel = new FQQuestionsTableModel(questionList);
 		questionsPanel.setQuestionTableModel(questionsTableModel);
+		
 	}
 	
 	private void setActionListeners() {
@@ -264,9 +259,9 @@ public class QuestionController {
 	}
 	
 	private void backButtonActionPerformed(ActionEvent evt) {
-		topicList.clear();
-		subjectList.clear();
-		questionList.clear();
+		topicComboBoxModel.removeAllElements();
+		subjectComboBoxModel.removeAllElements();
+		questionsTableModel.removeAllRows();
 		questionsPanel.setVisible(false);
 		mainController.showMainMenu();
 	}
@@ -280,7 +275,8 @@ public class QuestionController {
 	
 	private void editButtonActionPerformed(ActionEvent evt) {
 //		setFilterSelections();
-		editQuestionPanel.setQuestion(questionList.get(questionsPanel.getSelectedRow()));
+		editQuestionPanel.setQuestion(questionsTableModel.getQuestionAtRow(questionsPanel.getSelectedRow()));	
+//		editQuestionPanel.setQuestion(questionList.get(questionsPanel.getSelectedRow()));
 		editQuestionDialog.setVisible(true);
 		restoreFilterSelections();
 	}
@@ -533,14 +529,16 @@ public class QuestionController {
 	private void initializeFilterLists() {
 		topicComboBoxModel.removeAllElements();
 		subjectComboBoxModel.removeAllElements();
+		questionsTableModel.removeAllRows();
 		topicDAO.beginTransaction();
 		topicList.addAll(topicDAO.findAll());
 		subjectList.addAll(subjectDAO.findAll());		
-		if(questionDAO.getCount() > questionsPanel.getPageSize()) 
-			questionsPanel.enableNextPageButton();
-		questionList.addAll(questionDAO.findRange(pageIndex, questionsPanel.getPageSize()));
-		questionsTableModel.fireTableDataChanged();
+//		if(questionDAO.getCount() > questionsPanel.getPageSize()) 
+//			questionsPanel.enableNextPageButton();
+//		System.err.println("Range; PageIndex:" + pageIndex + "  pageSize:" + questionsPanel.getPageSize());
+//		questionsTableModel.addRows(questionDAO.findRange(pageIndex, questionsPanel.getPageSize()));
 		topicDAO.commitTransaction();
+		refreshQuestionList();
 	}
 	
 	private void refreshTopicFilterList() {

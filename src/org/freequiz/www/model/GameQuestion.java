@@ -31,84 +31,101 @@ import javax.persistence.*;
  *
  */
 @Embeddable
-public class StudentGame {
-	private Student student;
+public class GameQuestion {
 	private Game game;
-	private Integer score;
+	private Integer gridIndex;
+	private Question question;
+	private Integer questionValue;
 	
-	public StudentGame() {}
-
-	public StudentGame(Game game, Student student) {
-		this(game, student, 0);
-	}
+	public GameQuestion() {}
 	
-	public StudentGame(Game game, Student student, Integer score) {
-		this.game = game;
-		this.student = student;
-		this.score = score;
-	}
-	
-	/**
-	 * @return the student
-	 */
-	@org.hibernate.annotations.Parent // Back-pointer
-	public Student getStudent() {
-		return student;
+	public GameQuestion(Integer gridIndex, Question question, Integer value) {
+		this.gridIndex = gridIndex;
+		this.question = question;
+		this.questionValue = value;
 	}
 
-	/**
-	 * @param student the student to set
-	 */
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-	
 	/**
 	 * @return the game
 	 */
-	@ManyToOne
-	@JoinColumn(name="GAMEID", nullable=false, updatable=false)
+	@org.hibernate.annotations.Parent // Back-pointer
 	public Game getGame() {
 		return game;
 	}
-	
+
 	/**
 	 * @param game the game to set
 	 */
 	public void setGame(Game game) {
 		this.game = game;
 	}
-	
+
 	/**
-	 * @return the score
+	 * @return the gridIndex
 	 */
-	@Column(name="SCORE", nullable=false, updatable=false)
-	public Integer getScore() {
-		return score;
+	@Column(name="QUESTIONINDEX", nullable=false, updatable=false)
+	public Integer getGridIndex() {
+		return gridIndex;
 	}
 
 	/**
-	 * @param score the score to set
+	 * @param gridIndex the gridIndex to set
 	 */
-	public void setScore(Integer score) {
-		this.score = score;
+	public void setGridIndex(Integer gridIndex) {
+		this.gridIndex = gridIndex;
+	}
+
+	/**
+	 * @return the question
+	 */
+	@ManyToOne
+	@JoinColumn(name="QUESTIONID", nullable=false, updatable=false)
+	public Question getQuestion() {
+		return question;
+	}
+
+	/**
+	 * @param question the question to set
+	 */
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+
+	/**
+	 * @return the questionValue
+	 */
+	@Column(name="QUESTIONVALUE", nullable=false, updatable=false)
+	public Integer getQuestionValue() {
+		return questionValue;
+	}
+
+	/**
+	 * @param questionValue the questionValue to set
+	 */
+	public void setQuestionValue(Integer questionValue) {
+		this.questionValue = questionValue;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Transient
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((game == null) ? 0 : game.hashCode());
-		result = prime * result + ((student == null) ? 0 : student.hashCode());
+		result = prime * result
+				+ ((question == null) ? 0 : question.hashCode());
+		result = prime * result
+				+ ((questionValue == null) ? 0 : questionValue.hashCode());
 		return result;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Transient
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -117,16 +134,21 @@ public class StudentGame {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		StudentGame other = (StudentGame) obj;
+		GameQuestion other = (GameQuestion) obj;
 		if (game == null) {
 			if (other.game != null)
 				return false;
 		} else if (!game.equals(other.game))
 			return false;
-		if (student == null) {
-			if (other.student != null)
+		if (question == null) {
+			if (other.question != null)
 				return false;
-		} else if (!student.equals(other.student))
+		} else if (!question.equals(other.question))
+			return false;
+		if (questionValue == null) {
+			if (other.questionValue != null)
+				return false;
+		} else if (!questionValue.equals(other.questionValue))
 			return false;
 		return true;
 	}
@@ -136,6 +158,9 @@ public class StudentGame {
 	 */
 	@Override
 	public String toString() {
-		return student + " ( " + score + " )";
-	}	
+		return "GameQuestion [game=" + game + ", question=" + question
+				+ ", questionValue=" + questionValue + "]";
+	}
+	
+	
 }

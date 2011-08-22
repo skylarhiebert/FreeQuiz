@@ -63,6 +63,7 @@ public class FQQuestionsTableModel extends AbstractTableModel {
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			return null;
 		}
+		
 	}
 	
 	protected static Vector<Object> convertToVector(Object[] anArray) {

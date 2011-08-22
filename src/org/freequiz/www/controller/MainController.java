@@ -29,9 +29,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import org.freequiz.www.dao.AbstractDAOFactory;
 import org.freequiz.www.dao.*;
 import org.freequiz.www.dao.hibernate.HibernateUtil;
+import org.freequiz.www.model.Game;
 import org.freequiz.www.model.Question;
 import org.freequiz.www.model.Roster;
 import org.freequiz.www.model.Student;
@@ -46,8 +46,16 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
  *
  */
 public class MainController {
+	public final static int MINTOPICS = 2;
+	public final static int MAXTOPICS = 8;
+	public final static int MINQUESTIONS = 2;
+	public final static int MAXQUESTIONS = 8;
+	public final static String GRADELEVELS[] = {"Pre-K", "K", "1", "2", "3", "4", "5", "6", "7", "8", "High School", "College" };
+	public final static Long DIFFICULTIES[] = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L};
+	
 	protected QuestionController questionsController;
 	protected RosterController classesController;
+	protected GameController gameController;
 	protected MainFrame mainFrame;
 	protected MainMenu mainMenuPanel;
 	
@@ -60,7 +68,9 @@ public class MainController {
 	private void initComponents() {
 		HibernateUtil.initializeHibernate();
 		questionsController = new QuestionController(this);
+		gameController = new GameController(this);
 		classesController = new RosterController(this);
+		
 		mainFrame = new MainFrame();
 		mainMenuPanel = new MainMenu();
 	}
@@ -70,6 +80,13 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				quitActionPerformed(evt);
+			}
+		});
+		
+		mainFrame.addNewGameMenuItemActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				newGameActionPerformed(evt);
 			}
 		});
 		
@@ -143,14 +160,13 @@ public class MainController {
 	}
 	
 	private void questionAdminActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
 		mainMenuPanel.setVisible(false);
 		setContentPane("Question Administration Menu", questionsController.getQuestionsPanel());
 	}
 	
 	private void newGameActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
-		
+		mainMenuPanel.setVisible(false);
+		setContentPane("Start New Game", gameController.getGamePanel());		
 	}
 	
 	private void loadGameActionPerformed(ActionEvent evt) {
@@ -172,39 +188,47 @@ public class MainController {
 		QuestionDAO questionDAO = factory.getQuestionDAO();
 		StudentDAO studentDAO = factory.getStudentDAO();
 		RosterDAO rosterDAO = factory.getRosterDAO();
+		GameDAO gameDAO = factory.getGameDAO();
 		subjectDAO.beginTransaction();
-		List<Question> qList = questionDAO.findAll();
-		System.err.println("Deleting " + qList.size() + " questions");
-		for(Question q : qList) {
-			System.err.println("Deleting Question : " + q);
-			q.setTopic(null);
-			questionDAO.delete(q);
-		}
-		List<Topic> topList = topicDAO.findAll();
-		System.err.println("Deleting " + topList.size() + " topics");
-		for(Topic t : topList) {
-			System.err.println("Deleting Topic : " + t);
-			t.setSubject(null);
-			topicDAO.delete(t);
-		}
-		List<Subject> subList = subjectDAO.findAll();
-		System.err.println("Deleting " + subList.size() + " subjects");
-		for(Subject s : subList) {
-			System.err.println("Deleting Subject : " + s);
-			subjectDAO.delete(s);
-		}
-		List<Student> studList = studentDAO.findAll();
-		System.err.println("Deleting " + studList.size() + " students");
-		for(Student s : studList) {
-			System.err.println("Deleting Student : " + s);
-			studentDAO.delete(s);
-		}
-		List<Roster> rosterList = rosterDAO.findAll();
-		System.err.println("Deleting " + rosterList.size() + " rosters");
-		for(Roster r : rosterList) {
-			System.err.println("Deleting Roster : " + r);
-			rosterDAO.delete(r);
-		}
+//		List<Question> qList = questionDAO.findAll();
+//		System.err.println("Deleting " + qList.size() + " questions");
+//		for(Question q : qList) {
+//			System.err.println("Deleting Question : " + q);
+//			q.setTopic(null);
+//			questionDAO.delete(q);
+//		}
+//		List<Topic> topList = topicDAO.findAll();
+//		System.err.println("Deleting " + topList.size() + " topics");
+//		for(Topic t : topList) {
+//			System.err.println("Deleting Topic : " + t);
+//			t.setSubject(null);
+//			topicDAO.delete(t);
+//		}
+//		List<Subject> subList = subjectDAO.findAll();
+//		System.err.println("Deleting " + subList.size() + " subjects");
+//		for(Subject s : subList) {
+//			System.err.println("Deleting Subject : " + s);
+//			subjectDAO.delete(s);
+//		}
+//		List<Student> studList = studentDAO.findAll();
+//		System.err.println("Deleting " + studList.size() + " students");
+//		for(Student s : studList) {
+//			System.err.println("Deleting Student Games: " + s.getGamesPlayed());
+//			s.getGamesPlayed().clear();
+//			studentDAO.save(s);
+//		}
+//		List<Roster> rosterList = rosterDAO.findAll();
+//		System.err.println("Deleting " + rosterList.size() + " rosters");
+//		for(Roster r : rosterList) {
+//			System.err.println("Deleting Roster : " + r);
+//			rosterDAO.delete(r);
+//		}
+//		List<Game> gameList = gameDAO.findAll();
+//		for(Game g : gameList) {
+//			System.err.println("Deleting Game : " + g);
+//			gameDAO.delete(g);
+//		}
+		
 		
 		subjectDAO.commitTransaction();
 //		org.hibernate.cfg.Configuration config = new Configuration();
@@ -225,6 +249,12 @@ public class MainController {
 	private void quitActionPerformed(ActionEvent evt) {
 		// Close any data connections
 		// Confirm any writes or quit without saving
+		try {
+			if(mainFrame.getCurrentContentPane() instanceof ActiveGamePanel) 
+				gameController.saveCurrentGame();
+		} catch (NullPointerException ex) {
+			System.err.println("No content panes in main frame. " + ex);
+		}
 		mainFrame.dispose();
 		System.exit(0);
 	}

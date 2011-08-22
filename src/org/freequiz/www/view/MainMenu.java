@@ -153,6 +153,14 @@ public class MainMenu extends JPanel {
 				.addComponent(controlPanel)
 		);
 
+		// Settings that need to be removed as the functions are implemented
+		loadGameLabel.setVisible(false);
+		loadGameButton.setVisible(false);
+		reviewGameLabel.setVisible(false);
+		reviewGameButton.setVisible(false);
+		importExportLabel.setVisible(false);
+		importExportButton.setVisible(false);
+		
 	}
 
 	// Button Action Listeners

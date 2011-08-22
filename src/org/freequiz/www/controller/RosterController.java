@@ -71,6 +71,7 @@ public class RosterController {
 		initComponents();
 		setActionListeners();
 	}
+	
 	private void initComponents() {
 		AbstractDAOFactory factory = AbstractDAOFactory.getFactory();
 		studentDAO = factory.getStudentDAO();
@@ -90,13 +91,13 @@ public class RosterController {
 		editRosterPanel.setStudentListModel(editRosterStudentListModel);
 		editRosterDialog = new EditDialogFrame(editRosterPanel, "Edit Class");
 		editRosterDialog.setMinimumSize(new Dimension(700,550));
-		
+		editRosterDialog.setLocationRelativeTo(mainController.mainFrame);
 		try {
 			studentDAO.beginTransaction();
 			studentListModel.addAll(studentDAO.findAll());
 			studentDAO.commitTransaction();
 		} catch (Exception ex) {
-			System.err.println("Error initializing student list");
+			System.err.println("Error initializing student list." + ex);
 			throw new ExceptionInInitializerError();
 		}
 	}
@@ -424,8 +425,8 @@ public class RosterController {
 		List<Integer> scores = selectedStudent.getScores();
 		float averageScore = 0;
 		int topScore = 0;
-		studentPanel.setGamesPlayed(selectedStudent.getNumberGames());
-		if(scores != null) {
+		studentPanel.setGamesPlayed(selectedStudent.getNumberGamesPlayed());
+		if(scores != null && scores.size() > 0) {
 			for(int score : scores) {
 				if(score > topScore)
 					topScore = score;

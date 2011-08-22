@@ -122,7 +122,8 @@ public class Roster {
 	 * @param studentList the roster to set
 	 */
 	public void setStudentList(List<Student> studentList) {
-		Hibernate.initialize(studentList);
+		if(!Hibernate.isInitialized(studentList))
+			Hibernate.initialize(studentList);
 		this.studentList = studentList;
 	}
 

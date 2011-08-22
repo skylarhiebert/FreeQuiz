@@ -25,6 +25,7 @@
 package org.freequiz.www.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.freequiz.www.model.Subject;
 import org.freequiz.www.model.Topic;
@@ -42,6 +43,8 @@ public interface QuestionDAO extends GenericDAO<Question, Long> {
 	public abstract List<Question> findRangeByTopic(int startIndex, int maxResults, Topic topic);
 	public abstract List<Question> findByExampleWithSubject(Question exampleInstance, Subject subject, String[] excludeProperty);
 	public abstract List<Question> findRangeByExampleWithSubject(int startIndex, int maxResults, Question exampleInstance, Subject subject, String[] excludeProperty);
+	public abstract List<Question> findRandomQuestionSetByExample(int numQuestions, Question exampleInstance) throws Exception;
+	public abstract List<String> findAllGradeLevels();
 	public abstract int getCount(Topic topic);
 	public abstract int getCount(Subject subject);
 	public abstract int getCountByExampleWithSubject(Question exampleInstance, Subject subject, String[] excludeProperty);

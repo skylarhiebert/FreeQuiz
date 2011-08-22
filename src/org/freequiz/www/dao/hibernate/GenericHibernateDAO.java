@@ -64,9 +64,9 @@ public abstract class GenericHibernateDAO <T, ID extends Serializable> implement
 	
 	@SuppressWarnings("unchecked")
 	public List<T> findRange(int startIndex, int maxResults) {
-		Criteria criteria = HibernateUtil.getSession().createCriteria(getPersistentClass());
-		criteria.setFirstResult(startIndex);
-		criteria.setMaxResults(maxResults);
+		Criteria criteria = HibernateUtil.getSession().createCriteria(getPersistentClass())
+			.setFirstResult(startIndex)
+			.setMaxResults(maxResults);
 		return criteria.list();
 	}
 	

@@ -47,4 +47,5 @@ public abstract class AbstractDAOFactory {
 	public abstract QuestionDAO getQuestionDAO();
 	public abstract RosterDAO getRosterDAO();
 	public abstract StudentDAO getStudentDAO();
+	public abstract GameDAO getGameDAO();
 }

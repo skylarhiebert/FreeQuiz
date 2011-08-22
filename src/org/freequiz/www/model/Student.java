@@ -25,9 +25,13 @@
 package org.freequiz.www.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.Hibernate;
 
 /**
  * @author Skylar Hiebert
@@ -38,9 +42,9 @@ import javax.persistence.*;
 public class Student {
 	private int studentid;
 	private String name;
-	private List<Integer> scores;
+	private List<Integer> scores = new ArrayList<Integer>();
 	private List<Roster> rosterMembership;
-	private List<StudentGame> gamesPlayed = new ArrayList<StudentGame>();
+	private Set<StudentGame> gamesPlayed = new HashSet<StudentGame>();
 	public Student() {}
 	
 	/**
@@ -119,17 +123,42 @@ public class Student {
 	/**
 	 * @return the gamesPlayed
 	 */
+	@ElementCollection
 	@JoinTable(name="STUDENTGAMES",
 			joinColumns = @JoinColumn(name="STUDENTID"))
-	public List<StudentGame> getGamesPlayed() {
+	public Set<StudentGame> getGamesPlayed() {
 		return gamesPlayed;
 	}
 
 	/**
 	 * @param gamesPlayed the gamesPlayed to set
 	 */
-	public void setGamesPlayed(List<StudentGame> gamesPlayed) {
+	public void setGamesPlayed(Set<StudentGame> gamesPlayed) {
 		this.gamesPlayed = gamesPlayed;
+		for(StudentGame game : this.gamesPlayed)
+			scores.add(game.getScore());
+	}
+	
+	public void addGamePlayed(StudentGame gamePlayed) {
+		if(gamePlayed.getStudent() == this)
+			this.gamesPlayed.add(gamePlayed);
+	}
+	
+	@Transient
+	public StudentGame getStudentGame(Game game) {
+		System.err.println("this initialized?: " + Hibernate.isInitialized(this));
+		StudentGame foundGame = null;
+		if(gamesPlayed.contains(game)) {
+			java.util.Iterator<StudentGame> iter = gamesPlayed.iterator();
+			while(iter.hasNext()) {
+				StudentGame sg = iter.next();
+				if(sg.getGame() == game) {
+					foundGame = sg;
+					break;
+				}
+			}
+		}
+		return foundGame;
 	}
 	
 	@Transient
@@ -138,12 +167,7 @@ public class Student {
 	}
 	
 	@Transient
-	public void setScores(List<Integer> scores) {
-		this.scores = scores;
-	}
-	
-	@Transient
-	public Integer getNumberGames() {
+	public Integer getNumberGamesPlayed() {
 		if(scores == null || scores.isEmpty())
 			return 0;
 		else

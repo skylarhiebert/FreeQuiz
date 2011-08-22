@@ -166,30 +166,6 @@ public class StudentAdminMenu extends JPanel {
 						.addComponent(topScoreTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		statisticsPanelLayout.linkSize(SwingConstants.HORIZONTAL, gamesPlayedLabel, averageScoreLabel, topScoreLabel);
-//		statisticsPanelLayout.linkSize(SwingConstants.HORIZONTAL, gamesPlayedTextField, averageScoreTextField, topScoreTextField);
-//		statisticsPanelLayout.linkSize(SwingConstants.VERTICAL, gamesPlayedLabel, averageScoreLabel, topScoreLabel, 
-//				gamesPlayedTextField, averageScoreTextField, topScoreTextField);
-//		statisticsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-//		GridBagLayout statisticsPanelLayout = new GridBagLayout();
-//		statisticsPanel.setLayout(statisticsPanelLayout);
-//		GridBagConstraints gbc = new GridBagConstraints();
-//		gbc.fill = GridBagConstraints.HORIZONTAL;
-//		gbc.insets = new Insets(10,0,10,0);
-//		gbc.gridy = 0;
-//		gbc.gridx = 0;
-//		statisticsPanel.add(gamesPlayedLabel, gbc);
-//		gbc.gridx = 1;
-//		statisticsPanel.add(gamesPlayedTextField, gbc);
-//		gbc.gridy = 1;
-//		gbc.gridx = 0;
-//		statisticsPanel.add(averageScoreLabel, gbc);
-//		gbc.gridx = 1;
-//		statisticsPanel.add(averageScoreTextField, gbc);
-//		gbc.gridy = 2;
-//		gbc.gridx = 0;
-//		statisticsPanel.add(topScoreLabel, gbc);
-//		gbc.gridx = 1;
-//		statisticsPanel.add(topScoreTextField, gbc);		
 		
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);

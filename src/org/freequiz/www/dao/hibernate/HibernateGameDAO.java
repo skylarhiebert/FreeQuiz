@@ -24,34 +24,15 @@
  */
 package org.freequiz.www.dao.hibernate;
 
-import org.freequiz.www.dao.*;
+import org.freequiz.www.dao.GameDAO;
+import org.freequiz.www.model.Game;
 
 /**
  * @author Skylar Hiebert
  *
  */
-public class HibernateDAOFactory extends AbstractDAOFactory {
-	public TopicDAO getTopicDAO() {
-		return new HibernateTopicDAO();
-	}
-	
-	public SubjectDAO getSubjectDAO() {
-		return new HibernateSubjectDAO();
-	}
-	
-	public QuestionDAO getQuestionDAO() {
-		return new HibernateQuestionDAO();
-	}
-	
-	public StudentDAO getStudentDAO() {
-		return new HibernateStudentDAO();
-	}
-	
-	public RosterDAO getRosterDAO() {
-		return new HibernateRosterDAO();
-	}
-	
-	public GameDAO getGameDAO() {
-		return new HibernateGameDAO();
+public class HibernateGameDAO extends GenericHibernateDAO<Game, Long> implements GameDAO {
+	public HibernateGameDAO() {
+		super(Game.class);
 	}
 }

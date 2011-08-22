@@ -291,6 +291,10 @@ public class QuestionAdminMenu extends JPanel {
 				.addComponent(questionsPanel)
 				.addComponent(backButton)
 		);
+		
+		// Settings that need to be removed as the functions are implemented
+		searchFilterTextField.setVisible(false);
+		searchFilterButton.setVisible(false);
 	}
 		
 	public void setTopicFilterComboBoxModel(ComboBoxModel cbm) {
@@ -324,8 +328,8 @@ public class QuestionAdminMenu extends JPanel {
 		editButton.setEnabled(true);		
 	}
 	
-	public int getSelectedRow() {
-		return questionsListTable.getSelectedRow();
+	public int getSelectedRow() {	
+		return questionsListTable.convertRowIndexToModel(questionsListTable.getSelectedRow());
 	}
 	
 	public void clearFilterSelections() {
@@ -402,80 +406,6 @@ public class QuestionAdminMenu extends JPanel {
 	public void disablePrevPageButton() {
 		prevPageButton.setEnabled(false);
 	}
-	
-//	public Question getSelectedQuestion() {
-//		return new Question();
-//	}
-	
-//	
-//	public void setQuestionsList(Object[] list) {
-//		questionsListDataModel.setElements(list);
-//	}
-//	
-//	public void setQuestionsList(Collection<?> c) {
-//		questionsListDataModel.setElements(c);
-//	}
-//	
-//	private void searchButtonActionPerformed(ActionEvent evt) {
-//		topicFilterDataModel.addElement(new Topic(1, "Addition", new Subject(1, "Math"), 1));
-//		//testVector.add(new Topic(1, "Addition", new Subject(1, "Math"), 1));
-//		for (Topic myString : testVector)
-//			System.out.println(myString);
-//	}
-	
-//	/**
-//	 * Sets the gradeLevelFilterComboBox list
-//	 * Caution: This will erase the existing list
-//	 * @param list the list of elements to be set
-//	 */
-//	public void setGradeLevelFilter(Object[] list) {
-//		gradeLevelFilterDataModel.setElements(list);
-//	}
-//	
-//	/**
-//	 * Sets the gradeLevelFilterComboBox list
-//	 * Caution: This will erase the existing list
-//	 * @param c the collection of elements to be set
-//	 */
-//	public void setGradeLevelFilter(Collection<?> c) {
-//		gradeLevelFilterDataModel.setElements(c);
-//	}
-	
-//	/**
-//	 * Sets the subjectFilterComboBox list
-//	 * Caution: This will erase the existing list
-//	 * @param list the list of elements to be set
-//	 */
-//	public void setSubjectFilter(Object[] list) {
-//		subjectFilterDataModel.setElements(list);
-//	}
-//	
-//	/**
-//	 * Sets the subjectFilterComboBox list
-//	 * Caution: This will erase the existing list
-//	 * @param c the collection of elements to be set
-//	 */
-//	public void setSubjectFilter(Collection<?> c) {
-//		subjectFilterDataModel.setElements(c);
-//	}
-	
-//	/**
-//	 * Sets the topicFilterComboBox list
-//	 * Caution: This will erase the existing list
-//	 * @param list the list of elements to be set
-//	 */
-//	public void setTopicFilter(Object[] list) {
-//		topicFilterDataModel.setElements(list);
-//	}
-//	
-//	/**
-//	 * Sets the topicFilterComboBox list
-//	 * Caution: This will erase the existing list
-//	 * @param c the collection of elements to be set
-//	 */
-//	public void setTopicFilter(Collection<?> c) {
-//		topicFilterDataModel.setElements(c);
-//	}
 }
 
 

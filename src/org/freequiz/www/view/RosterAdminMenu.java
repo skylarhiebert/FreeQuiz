@@ -113,6 +113,7 @@ public class RosterAdminMenu extends JPanel {
 		studentList = new JList(studentListModel);
 		studentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		studentScrollPane = new JScrollPane(studentList);
+		studentScrollPane.setPreferredSize(new Dimension(150, studentScrollPane.getPreferredSize().height));
 		
 		/* Button Panel */
 		Dimension buttonPreferredSize = new Dimension(100, 23);
@@ -210,7 +211,7 @@ public class RosterAdminMenu extends JPanel {
 	}
 	
 	public int getSelectedRowIndex() {
-		return rosterListTable.getSelectedRow();
+		return rosterListTable.convertRowIndexToModel(rosterListTable.getSelectedRow());
 	}
 	
 	public void setRosterListTableModel(TableModel tm) {
